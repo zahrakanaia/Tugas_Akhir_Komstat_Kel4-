@@ -1,4 +1,4 @@
-# Aplikasi ANOVA Multi-Tahapan dengan Indikator dan Navigasi Otomatis
+
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
