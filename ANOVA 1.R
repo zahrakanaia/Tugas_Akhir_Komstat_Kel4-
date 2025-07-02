@@ -10,6 +10,16 @@ ui <- dashboardPage(
   dashboardHeader(title = "Aplikasi ANOVA"),
   dashboardSidebar(
     sidebarMenu(id = "tabs",
+                br(), br(),
+                div(style = "padding: 20px;",
+                    radioButtons(
+                      inputId = "dark_mode",
+                      label = "Mode Tampilan",
+                      choices = c("Light" = "light", "Dark" = "dark"),
+                      selected = "light",
+                      inline = TRUE
+                    )
+                ),
                 menuItem("Home", tabName = "home", icon = icon("home")),
                 menuItem("Input Data", tabName = "input", icon = icon("upload")),
                 menuItem("Uji Kenormalan", tabName = "normal", icon = icon("chart-line")),
@@ -94,6 +104,14 @@ server <- function(input, output, session) {
   output$dataPreview <- renderTable({ head(dataInput(), 10) })
   output$varSelect <- renderUI({ req(dataInput()); selectInput("numericVar", "Variabel Numerik", names(Filter(is.numeric, dataInput()))) })
   output$groupSelect <- renderUI({ req(dataInput()); selectInput("groupVar", "Variabel Grup", names(dataInput())) })
+
+   observe({
+    req(input$dark_mode)
+    session$sendCustomMessage(
+      type = "toggleDark",
+      message = input$dark_mode == "dark"
+    )
+  })
   
   observeEvent(input$submitData, {
     updateTabItems(session, "tabs", "normal")
